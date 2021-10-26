@@ -21,7 +21,7 @@ async function exportCSV() {
     const normalized = await normalize(address)
 
     const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場/g)
-    const isAddr =  normalized.addr.match(/仮/g)
+    const isAddr =  normalized.addr.match(/仮|予定|駐車場|,/g)
 
     if (isBuilding === null && isAddr === null && normalized.level === 3 && normalized.addr !== '') {
 
