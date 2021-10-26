@@ -8,9 +8,14 @@ const csvSync = require('csv-parse/lib/sync'); // requiring sync module
 async function exportCSV() {
 
   const file = fs.readFileSync(path.join(__dirname, 'filter.csv'), 'utf8')
-  const data = csvSync(file);
+  const rawData = csvSync(file);
   const buildingCSV = []
   const multiBuildingsCSV = []
+  
+  // 重複削除
+  const map = new Map();
+  rawData.forEach((item) => map.set(item.join(), item));
+  const data = Array.from(map.values());
 
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
