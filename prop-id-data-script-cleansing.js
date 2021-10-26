@@ -7,7 +7,7 @@ const { normalize } = require('@geolonia/normalize-japanese-addresses')
 
 async function exportCSV() {
 
-  const file = fs.readFileSync(path.join(__dirname, 'all-buldings.csv'), 'utf8')
+  const file = fs.readFileSync(path.join(__dirname, 'all-buildings.csv'), 'utf8')
   const data = csvSync(file);
 
   const fd = fs.openSync('./filter.csv', 'w')
