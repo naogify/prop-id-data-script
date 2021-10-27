@@ -21,7 +21,7 @@ caffeinate node prop-id-data-script-cleansing.js
 
 
 
-## 1住所1建物と1住所複数建物に分類
+## 1住所に複数ビル名があるデータと1つのビル名データに分類
 
 ```
 caffeinate node prop-id-data-script-export.js
