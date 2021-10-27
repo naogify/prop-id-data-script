@@ -17,6 +17,8 @@ async function exportCSV() {
   rawData.forEach((item) => map.set(item.join(), item));
   const data = Array.from(map.values());
 
+  // asc 行と住所が一致する行を削除
+
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
     const building = item[0]

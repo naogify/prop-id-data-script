@@ -9,8 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@geolonia/japanese-numeral": "^0.1.15",
     "@geolonia/normalize-japanese-addresses": "^2.3.2",
     "csv-parse": "^4.16.3",
-    "csv-writer": "^1.6.0"
+    "csv-writer": "^1.6.0",
+    "jaconv": "^1.0.4",
+    "kuroshiro": "^1.2.0",
+    "romans": "^2.0.3"
   }
 }
