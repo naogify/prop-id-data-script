@@ -5,9 +5,7 @@ const path = require('path')
 const csvSync = require('csv-parse/lib/sync'); // requiring sync module
 const { normalize } = require('@geolonia/normalize-japanese-addresses')
 const { kanji2number, findKanjiNumbers } = require('@geolonia/japanese-numeral')
-const roman = require('romans');
-const jaconv = require((jaconv))
-const Kuroshiro = require("kuroshiro")
+const jaconv = require('jaconv')
 
 function kan2num(string) {
   const kanjiNumbers = findKanjiNumbers(string)
@@ -40,8 +38,6 @@ async function exportCSV() {
 
       let normalizedBuilding = building;
 
-      // ひらがなをカタカナに変換
-      normalizedBuilding = Kuroshiro.Util.kanaToKatakana(normalizedBuilding)
       // 中黒（・）があった場合に削除
       normalizedBuilding = normalizedBuilding.replace(/・/g, '')
       // 空白文字を削除
@@ -55,11 +51,9 @@ async function exportCSV() {
       normalizedBuilding = normalizedBuilding.replace(/ヴェ|ｳﾞｪﾞ/g, 'ﾍﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴォ|ｳﾞｫﾞ/g, 'ﾎﾞ')
       // 全角英数記号、カタカナを半角に変換
-      normalizedBuilding = jconv.toHan(normalizedBuilding)
+      normalizedBuilding = await jaconv.toHan(normalizedBuilding)
       // 漢数字を半角アラビア数字に直す
-      normalizedBuilding = kan2num(normalizedBuilding)
-      // ローマ数字を半角アラビア数字に直す
-      normalizedBuilding = roman.deromanize(normalizedBuilding)
+      normalizedBuilding = await kan2num(normalizedBuilding)
       // 横棒をハイフンに変換
       normalizedBuilding = normalizedBuilding.replace(/[-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━]/g, '-')
       // 英語を日本語に変換
