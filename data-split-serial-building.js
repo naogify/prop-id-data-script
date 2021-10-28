@@ -76,7 +76,6 @@ async function exportCSV() {
 
   const file = fs.readFileSync(path.join(__dirname, 'multi-buildings-filter-geocoding-level.csv'), 'utf8')
   const data = csvSync(file);
-  console.log(data)
   const {multiBuildingsRandom, multiBuildingsSerials} = await dataSplitListBuilding(data)
 
   const csvWriterBuilding = createArrayCsvWriter({
