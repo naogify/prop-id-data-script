@@ -35,8 +35,8 @@ async function dataSplitListBuilding(data) {
 
     const item = addressKeyObject[key]
 
-    //数字とアルファベットとハイフンを削除
-    const onlyBuildingNames = item.map(row => row[1].replace(/[0-9a-zA-Z]/g, ''))
+    //数字とアルファベットと12までのローマ数字を削除
+    const onlyBuildingNames = item.map(row => row[1].replace(/[0-9a-zA-Z]|[ⅰ-ⅻ]|[Ⅰ-Ⅻ]/g, ''))
 
     if (!onlyBuildingNames.includes('') ) {
 
