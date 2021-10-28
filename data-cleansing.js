@@ -56,6 +56,8 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south/g, '南')
       normalizedBuilding = normalizedBuilding.replace(/East|EAST|east/g, '東')
       normalizedBuilding = normalizedBuilding.replace(/West|WEST|west/g, '西')
+      // アルファベットを小文字に変換
+      normalizedBuilding = normalizedBuilding.toLowerCase()
 
       outCSV.push([
         building,

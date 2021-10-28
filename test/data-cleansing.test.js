@@ -69,7 +69,7 @@ describe('ビル名の正規化テスト', () => {
 
   test('全角アルファベット・数字は、半角、に直す', async () => {
     const result = await dataCleansing([['ハイツ東京Ａ１', '東京都千代田区永田町１丁目７−１']])
-    expect(result).toMatchObject([['ハイツ東京Ａ１', 'ﾊｲﾂ東京A1', '東京都千代田区永田町一丁目7-1']])
+    expect(result).toMatchObject([['ハイツ東京Ａ１', 'ﾊｲﾂ東京a1', '東京都千代田区永田町一丁目7-1']])
   })
 
   test('横棒は、ハイフンで入力する', async () => {
@@ -92,4 +92,8 @@ describe('ビル名の正規化テスト', () => {
     expect(result).toMatchObject([['ハイツ壱号館', 'ﾊｲﾂ1', '東京都千代田区永田町一丁目7-1']])
   })
 
+  test('アルファベットを小文字に直す', async () => {
+    const result = await dataCleansing([['ハイツBEAUTY', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツBEAUTY', 'ﾊｲﾂbeauty', '東京都千代田区永田町一丁目7-1']])
+  })
 })
