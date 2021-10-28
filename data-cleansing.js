@@ -76,7 +76,7 @@ async function exportCSV() {
 
   const csvWriterBuilding = createArrayCsvWriter({
     header: ['building', 'normalizedBuilding', 'address'],
-    path: "./filter.csv",
+    path: "./cleansing.csv",
   })
   csvWriterBuilding.writeRecords(outCSV)
 }
