@@ -111,12 +111,17 @@ describe('ビル名の正規化テスト', () => {
   })
 
   test('ピリオド、カンマ、アポストロフィーを削除', async () => {
-    const result = await dataCleansing([['ハイツ,BEAUTY＇S.', '東京都千代田区永田町１丁目７−１']])
-    expect(result).toMatchObject([['ハイツ,BEAUTY＇S.', 'ﾊｲﾂbeautys', '東京都千代田区永田町一丁目7-1']])
+    const result = await dataCleansing([['ハイツ,BEAUTY＇S.．', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツ,BEAUTY＇S.．', 'ﾊｲﾂbeautys', '東京都千代田区永田町一丁目7-1']])
   })
 
   test('括弧があれば中の文字を含めて削除', async () => {
     const result = await dataCleansing([['ハイツタワー(はいつたわー)（はいつたわー）【はいつたわー】', '東京都千代田区永田町１丁目７−１']])
     expect(result).toMatchObject([['ハイツタワー(はいつたわー)（はいつたわー）【はいつたわー】', 'ﾊｲﾂﾀﾜ-', '東京都千代田区永田町一丁目7-1']])
+  })
+
+  test('12までのローマ数字は削除', async () => {
+    const result = await dataCleansing([['ハイツタワーⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻ', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツタワーⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻ', 'ﾊｲﾂﾀﾜ-123456789101112', '東京都千代田区永田町一丁目7-1']])
   })
 })

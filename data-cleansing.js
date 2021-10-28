@@ -43,7 +43,7 @@ async function dataCleansing(data) {
       // 中黒（・）があった場合に削除
       normalizedBuilding = normalizedBuilding.replace(/・|･/g, '')
       // ピリオド、カンマ、アポストロフィーを削除
-      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\，|\,|\＇|\'/g, '')
+      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\，|\,|\＇|\'|．/g, '')
       // 空白文字を削除
       normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
       // 括弧があれば中の文字を含めて削除
@@ -58,8 +58,21 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/ヴ|ｳﾞ/g, 'ﾌﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴェ|ｳﾞｪﾞ/g, 'ﾍﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴォ|ｳﾞｫﾞ/g, 'ﾎﾞ')
-      // 全角英数記号、カタカナを半角に変換
+      // 全角英数記号、カタカナ、ローマ数字を半角に変換
       normalizedBuilding = await jaconv.toHan(normalizedBuilding)
+      // 半角ローマ数字をアラビア数字に変換（MacデフォルトIMIとGoogle日本語入力では12までしか入力できない）
+      normalizedBuilding = normalizedBuilding.replace(/ⅰ/g, '1')
+      normalizedBuilding = normalizedBuilding.replace(/ⅱ/g, '2')
+      normalizedBuilding = normalizedBuilding.replace(/ⅲ/g, '3')
+      normalizedBuilding = normalizedBuilding.replace(/ⅳ/g, '4')
+      normalizedBuilding = normalizedBuilding.replace(/ⅴ/g, '5')
+      normalizedBuilding = normalizedBuilding.replace(/ⅵ/g, '6')
+      normalizedBuilding = normalizedBuilding.replace(/ⅶ/g, '7')
+      normalizedBuilding = normalizedBuilding.replace(/ⅷ/g, '8')
+      normalizedBuilding = normalizedBuilding.replace(/ⅸ/g, '9')
+      normalizedBuilding = normalizedBuilding.replace(/ⅹ/g, '10')
+      normalizedBuilding = normalizedBuilding.replace(/ⅺ/g, '11')
+      normalizedBuilding = normalizedBuilding.replace(/ⅻ/g, '12')
       // 漢数字を半角アラビア数字に直す
       normalizedBuilding = await kan2num(normalizedBuilding)
       // 横棒をハイフンに変換
