@@ -79,7 +79,8 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/ュ|ｭ/g, 'ﾕ')
       normalizedBuilding = normalizedBuilding.replace(/ョ|ｮ/g, 'ﾖ')
 
-      console.log(normalizedBuilding)
+      // アポストロフィーを半角に変換
+      normalizedBuilding = normalizedBuilding.replace(/＇/g, '\'')
 
       outCSV.push([
         building,

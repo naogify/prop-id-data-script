@@ -109,4 +109,9 @@ describe('ビル名の正規化テスト', () => {
     const result2 = await dataCleansing([['ウイングハィツ', '東京都千代田区永田町１丁目７−１']])
     expect(result2).toMatchObject([['ウイングハィツ', 'ｳｲﾝｸﾞﾊｲﾂ', '東京都千代田区永田町一丁目7-1']])
   })
+
+  test('アポストロフィーを半角に変換', async () => {
+    const result = await dataCleansing([['ハイツBEAUTY＇S', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツBEAUTY＇S', 'ﾊｲﾂbeauty\'s', '東京都千代田区永田町一丁目7-1']])
+  })
 })
