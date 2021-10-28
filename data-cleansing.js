@@ -69,7 +69,7 @@ async function dataCleansing(data) {
 
 async function exportCSV() {
 
-  const file = fs.readFileSync(path.join(__dirname, 'test.csv'), 'utf8')
+  const file = fs.readFileSync(path.join(__dirname, 'all-buildings.csv'), 'utf8')
   const data = csvSync(file);
 
   const outCSV = await dataCleansing(data)
@@ -81,7 +81,9 @@ async function exportCSV() {
   csvWriterBuilding.writeRecords(outCSV)
 }
 
-
-exportCSV()
+// テストで読み込み時に実行しない
+if (require.main === module) {
+  exportCSV()
+}
 
 exports.dataCleansing = dataCleansing
