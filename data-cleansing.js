@@ -6,6 +6,7 @@ const csvSync = require('csv-parse/lib/sync'); // requiring sync module
 const { normalize } = require('@geolonia/normalize-japanese-addresses')
 const { kanji2number, findKanjiNumbers } = require('@geolonia/japanese-numeral')
 const jaconv = require('jaconv')
+const { createArrayCsvWriter } = require('csv-writer')
 
 function kan2num(string) {
   const kanjiNumbers = findKanjiNumbers(string)
@@ -16,14 +17,8 @@ function kan2num(string) {
   return string
 }
 
-async function exportCSV() {
-
-  const file = fs.readFileSync(path.join(__dirname, 'all-buildings.csv'), 'utf8')
-  const data = csvSync(file);
-
-  const fd = fs.openSync('./filter.csv', 'w')
-
-  fs.writeFileSync(fd, `building,normalizedBuilding,address\n`)
+async function dataCleansing(data) {
+  const outCSV = []
 
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
@@ -62,11 +57,31 @@ async function exportCSV() {
       normalizedBuilding = normalizedBuilding.replace(/East|EAST|east/g, '東')
       normalizedBuilding = normalizedBuilding.replace(/West|WEST|west/g, '西')
 
-      fs.writeFileSync(fd, `${building},${normalizedBuilding},${normalized.pref}${normalized.city}${normalized.town}${normalized.addr}\n`)
+      outCSV.push([
+        building,
+        normalizedBuilding,
+        `${normalized.pref}${normalized.city}${normalized.town}${normalized.addr}`
+      ])
     }
   }
-
-  fs.closeSync(fd)
+  return outCSV
 }
 
+async function exportCSV() {
+
+  const file = fs.readFileSync(path.join(__dirname, 'test.csv'), 'utf8')
+  const data = csvSync(file);
+
+  const outCSV = await dataCleansing(data)
+
+  const csvWriterBuilding = createArrayCsvWriter({
+    header: ['building', 'normalizedBuilding', 'address'],
+    path: "./filter.csv",
+  })
+  csvWriterBuilding.writeRecords(outCSV)
+}
+
+
 exportCSV()
+
+exports.dataCleansing = dataCleansing
