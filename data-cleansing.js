@@ -33,7 +33,7 @@ async function dataCleansing(data) {
     const address = item[1]
     const normalized = await normalize(address)
 
-    const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場|駐輪場|\n/g)
+    const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場|駐輪場|店舗|戸建|\n/g)
     const isAddr =  normalized.addr.match(/仮|予定|駐車場|,|\n/g)
 
     if (isBuilding === null && isAddr === null && normalized.level === 3 && building !== '' & normalized.addr !== '') {
@@ -46,6 +46,8 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/\.|\.|\，|\,|\＇|\'/g, '')
       // 空白文字を削除
       normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
+      // 括弧があれば中の文字を含めて削除
+      normalizedBuilding = normalizedBuilding.replace(/\(.+?\)|\（.+?\）|\【.+?\】/g, '')
       // 第、館、号、棟は削除
       normalizedBuilding = normalizedBuilding.replace(/第|館|号|棟|番/g, '')
       // ひらがなをカタカナに直す

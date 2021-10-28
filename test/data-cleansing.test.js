@@ -114,4 +114,9 @@ describe('ビル名の正規化テスト', () => {
     const result = await dataCleansing([['ハイツ,BEAUTY＇S.', '東京都千代田区永田町１丁目７−１']])
     expect(result).toMatchObject([['ハイツ,BEAUTY＇S.', 'ﾊｲﾂbeautys', '東京都千代田区永田町一丁目7-1']])
   })
+
+  test('括弧があれば中の文字を含めて削除', async () => {
+    const result = await dataCleansing([['ハイツタワー(はいつたわー)（はいつたわー）【はいつたわー】', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツタワー(はいつたわー)（はいつたわー）【はいつたわー】', 'ﾊｲﾂﾀﾜ-', '東京都千代田区永田町一丁目7-1']])
+  })
 })
