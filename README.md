@@ -29,7 +29,7 @@ caffeinate node data-cleansing.js
 ## 2. 1住所に複数ビル名があるデータと1つのビル名データに分類
 
 ```
-caffeinate node data-filter.js
+caffeinate node data-split.js
 ```
 
 処理内容
