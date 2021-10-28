@@ -4,8 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "node data-cleansing.js",
-    "export": "node data-export.js",
     "test": "jest"
   },
   "author": "",
