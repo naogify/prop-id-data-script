@@ -36,7 +36,7 @@ async function dataSplitListBuilding(data) {
     const item = addressKeyObject[key]
 
     //数字とアルファベットと12までのローマ数字を削除（MacデフォルトIMIとGoogle日本語入力では12までしか入力できない）
-    const onlyBuildingNames = item.map(row => row[1].replace(/[0-9a-zA-Z]|[ⅰ-ⅻ]|[Ⅰ-Ⅻ]/g, ''))
+    const onlyBuildingNames = item.map(row => row[1].replace(/[0-9a-zA-Z]|[ⅰ-ⅻ]|[Ⅰ-Ⅻ]|[①-⑩]|[❶-➓]|[⑴-⒑]/g, ''))
 
     if (!onlyBuildingNames.includes('') ) {
 

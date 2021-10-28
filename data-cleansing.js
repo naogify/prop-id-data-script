@@ -33,7 +33,7 @@ async function dataCleansing(data) {
     const address = item[1]
     const normalized = await normalize(address)
 
-    const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場|駐輪場|店舗|戸建|\n/g)
+    const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場|駐輪場|店舗|戸建|駅前|\n/g)
     const isAddr =  normalized.addr.match(/仮|予定|駐車場|,|\n/g)
 
     if (isBuilding === null && isAddr === null && normalized.level === 3 && building !== '' & normalized.addr !== '') {
@@ -42,8 +42,16 @@ async function dataCleansing(data) {
 
       // 中黒（・）があった場合に削除
       normalizedBuilding = normalizedBuilding.replace(/・|･/g, '')
+      // ？があった場合に削除
+      normalizedBuilding = normalizedBuilding.replace(/\？|\?/g, '')
+      // №(ナンバー)をnoに変換
+      normalizedBuilding = normalizedBuilding.replace(/№/g, 'no')
       // ピリオド、カンマ、アポストロフィーを削除
-      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\，|\,|\＇|\'|．/g, '')
+      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\．|\，|\,|\＇|\'|\’|\´|\‘/g, '')
+      // が、ガ、ヶ は ｶﾞに変換
+      normalizedBuilding = normalizedBuilding.replace(/が|ガ|ヶ/g, 'ｶﾞ')
+      // ひらがなとカタカナ（全角半角）の伸ばし棒は削除
+      normalizedBuilding = normalizedBuilding.replace(/ー|ー|ｰ/g, '')
       // 空白文字を削除
       normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
       // 括弧があれば中の文字を含めて削除
@@ -55,9 +63,9 @@ async function dataCleansing(data) {
       //ヴァ, ヴィ, ヴ, ヴェ, ヴォ を ﾊﾞ, ﾋﾞ, ﾌﾞ, ﾍﾞ, ﾎﾞ に変換
       normalizedBuilding = normalizedBuilding.replace(/ヴァ|ｳﾞｧ/g, 'ﾊﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴィ|ｳﾞｨ/g, 'ﾋﾞ')
-      normalizedBuilding = normalizedBuilding.replace(/ヴ|ｳﾞ/g, 'ﾌﾞ')
-      normalizedBuilding = normalizedBuilding.replace(/ヴェ|ｳﾞｪﾞ/g, 'ﾍﾞ')
+      normalizedBuilding = normalizedBuilding.replace(/ヴェ|ｳﾞｪﾞ|ウ゛ェ/g, 'ﾍﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴォ|ｳﾞｫﾞ/g, 'ﾎﾞ')
+
       // 全角英数記号、カタカナ、ローマ数字を半角に変換
       normalizedBuilding = await jaconv.toHan(normalizedBuilding)
       // 半角ローマ数字をアラビア数字に変換（MacデフォルトIMIとGoogle日本語入力では12までしか入力できない）
@@ -78,12 +86,16 @@ async function dataCleansing(data) {
       // 横棒をハイフンに変換
       normalizedBuilding = normalizedBuilding.replace(/[-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━]/g, '-')
       // 英語を日本語に変換
-      normalizedBuilding = normalizedBuilding.replace(/North|NORTH|north/g, '北')
-      normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south/g, '南')
-      normalizedBuilding = normalizedBuilding.replace(/East|EAST|east/g, '東')
-      normalizedBuilding = normalizedBuilding.replace(/West|WEST|west/g, '西')
+      normalizedBuilding = normalizedBuilding.replace(/North|NORTH|north|ﾉｰｽ|ノース/g, '北')
+      normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south|ｻｳｽ|サウス/g, '南')
+      normalizedBuilding = normalizedBuilding.replace(/East|EAST|east|ｲｰｽﾄ|イースト/g, '東')
+      normalizedBuilding = normalizedBuilding.replace(/West|WEST|west|ｳｴｽﾄ|ウエスト/g, '西')
       // アルファベットを小文字に変換
       normalizedBuilding = normalizedBuilding.toLowerCase()
+
+      // ♯ を # に変換する
+      normalizedBuilding = normalizedBuilding.replace(/♯/g, '#')
+
 
       //ァィゥェォッャュョ を ｱｲｳｴｵﾂﾔﾕﾖ に変換
       normalizedBuilding = normalizedBuilding.replace(/ァ|ｧ/g, 'ｱ')
