@@ -28,11 +28,11 @@ async function dataFilter(rawData) {
 
     if (result.length > 1) {
       multiBuildingsCSV.push(
-        [building, address]
+        [building, normalizedBuilding, address]
       )
     } else {
       buildingCSV.push(
-        [building, address]
+        [building, normalizedBuilding, address]
       )
     }
   }
@@ -50,12 +50,12 @@ async function exportCSV() {
   const {buildingCSV, multiBuildingsCSV} = await dataFilter(rawData)
 
   const csvWriterBuilding = createArrayCsvWriter({
-    header: ['building', 'address'],
+    header: ['building', 'normalizedBuilding', 'address'],
     path: "./building.csv",
   })
 
   const csvWriterMultiBuildings = createArrayCsvWriter({
-    header: ['building', 'address'],
+    header: ['building', 'normalizedBuilding', 'address'],
     path: "./multi-buildings.csv",
   })
 
