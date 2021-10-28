@@ -17,6 +17,13 @@ function kan2num(string) {
   return string
 }
 
+function hiraToKana(str) {
+  return str.replace(/[\u3041-\u3096]/g, function(match) {
+      var chr = match.charCodeAt(0) + 0x60;
+      return String.fromCharCode(chr);
+  });
+}
+
 async function dataCleansing(data) {
   const outCSV = []
 
@@ -29,7 +36,7 @@ async function dataCleansing(data) {
     const isBuilding = building.match(/仮|予定|部分|邸宅|貸家|階|号室|駐車場|駐輪場|,|\n/g)
     const isAddr =  normalized.addr.match(/仮|予定|駐車場|,|\n/g)
 
-    if (isBuilding === null && isAddr === null && normalized.level === 3 && normalized.addr !== '') {
+    if (isBuilding === null && isAddr === null && normalized.level === 3 && building !== '' & normalized.addr !== '') {
 
       let normalizedBuilding = building;
 
@@ -39,6 +46,8 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
       // 第、館、号、棟は削除
       normalizedBuilding = normalizedBuilding.replace(/第|館|号|棟/g, '')
+      // ひらがなをカタカナに直す
+      normalizedBuilding = hiraToKana(normalizedBuilding)
       //ヴァ, ヴィ, ヴ, ヴェ, ヴォ を ﾊﾞ, ﾋﾞ, ﾌﾞ, ﾍﾞ, ﾎﾞ に変換
       normalizedBuilding = normalizedBuilding.replace(/ヴァ|ｳﾞｧ/g, 'ﾊﾞ')
       normalizedBuilding = normalizedBuilding.replace(/ヴィ|ｳﾞｨ/g, 'ﾋﾞ')
@@ -58,6 +67,19 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/West|WEST|west/g, '西')
       // アルファベットを小文字に変換
       normalizedBuilding = normalizedBuilding.toLowerCase()
+
+      //ァィゥェォッャュョ を ｱｲｳｴｵﾂﾔﾕﾖ に変換
+      normalizedBuilding = normalizedBuilding.replace(/ァ|ｧ/g, 'ｱ')
+      normalizedBuilding = normalizedBuilding.replace(/ィ|ｨ/g, 'ｲ')
+      normalizedBuilding = normalizedBuilding.replace(/ゥ|ｩ/g, 'ｳ')
+      normalizedBuilding = normalizedBuilding.replace(/ェ|ｪ/g, 'ｴ')
+      normalizedBuilding = normalizedBuilding.replace(/ォ|ｫ/g, 'ｵ')
+      normalizedBuilding = normalizedBuilding.replace(/ッ|ｯ/g, 'ﾂ')
+      normalizedBuilding = normalizedBuilding.replace(/ャ|ｬ/g, 'ﾔ')
+      normalizedBuilding = normalizedBuilding.replace(/ュ|ｭ/g, 'ﾕ')
+      normalizedBuilding = normalizedBuilding.replace(/ョ|ｮ/g, 'ﾖ')
+
+      console.log(normalizedBuilding)
 
       outCSV.push([
         building,
