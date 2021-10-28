@@ -50,6 +50,11 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/\.|\.|\．|\，|\,|\＇|\'|\’|\´|\‘/g, '')
       // が、ガ、ヶ は ｶﾞに変換
       normalizedBuilding = normalizedBuilding.replace(/が|ガ|ヶ/g, 'ｶﾞ')
+      // 英語を日本語に変換
+      normalizedBuilding = normalizedBuilding.replace(/North|NORTH|north|ﾉｰｽ|ノース/g, '北')
+      normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south|ｻｳｽ|サウス/g, '南')
+      normalizedBuilding = normalizedBuilding.replace(/East|EAST|east|ｲｰｽﾄ|イースト/g, '東')
+      normalizedBuilding = normalizedBuilding.replace(/West|WEST|west|ｳｴｽﾄ|ウエスト/g, '西')
       // ひらがなとカタカナ（全角半角）の伸ばし棒は削除
       normalizedBuilding = normalizedBuilding.replace(/ー|ー|ｰ/g, '')
       // 空白文字を削除
@@ -85,11 +90,6 @@ async function dataCleansing(data) {
       normalizedBuilding = await kan2num(normalizedBuilding)
       // 横棒をハイフンに変換
       normalizedBuilding = normalizedBuilding.replace(/[-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━]/g, '-')
-      // 英語を日本語に変換
-      normalizedBuilding = normalizedBuilding.replace(/North|NORTH|north|ﾉｰｽ|ノース/g, '北')
-      normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south|ｻｳｽ|サウス/g, '南')
-      normalizedBuilding = normalizedBuilding.replace(/East|EAST|east|ｲｰｽﾄ|イースト/g, '東')
-      normalizedBuilding = normalizedBuilding.replace(/West|WEST|west|ｳｴｽﾄ|ウエスト/g, '西')
       // アルファベットを小文字に変換
       normalizedBuilding = normalizedBuilding.toLowerCase()
 
