@@ -46,6 +46,14 @@ caffeinate node data-geocode-filter.js
 
 ## 処理状況の確認
 
+リアルタイムに filter.csv の最後の行をターミナルに表示
+
 ```
 tail -f filter.csv
+```
+
+`data-geocode-filter.js` が実行されているか確認
+
+```
+ps awwwux | grep data-geocode-filter.js
 ```
