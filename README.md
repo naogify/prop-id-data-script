@@ -46,6 +46,14 @@ caffeinate node data-filter.js
 caffeinate node data-geocode-filter.js
 ```
 
+## 4. 連番のビルとそうでないものを仕分け
+- 連番のビル名を、`multi-building-serial.csv` 、そうでないものを `multi-building-random.csv` として出力。
+- アルファベットのビル名の連番仕分けは未対応（例：`NIPPON STATES A号館、NIPPON STATES b号館`）
+
+```
+caffeinate node data-split-serial-building.js
+```
+
 
 ## 処理状況の確認
 
