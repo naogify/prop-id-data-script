@@ -1,4 +1,4 @@
-const { dataFilter } = require('../data-filter')
+const { dataSplit } = require('../data-split')
 
 const data = [
   [ 'building', 'normalizedBuilding', 'address' ],
@@ -14,7 +14,7 @@ const data = [
 describe('分類テスト', () => {
 
   test('1つの住所に、複数の建物と1つの建物で分類', async () => {
-    const {buildingCSV, multiBuildingsCSV} = await dataFilter(data)
+    const {buildingCSV, multiBuildingsCSV} = await dataSplit(data)
     const singleBuilding = [ [ 'ライオンズマンション浦和元町', 'ﾗｲｵﾝｽﾞﾏﾝｼｮﾝ浦和元町', '埼玉県さいたま市浦和区元町一丁目33-15' ] ]
     const multiBuildings = [
       [ 'パークスクエア浦和常盤', 'ﾊﾟ-ｸｽｸｴｱ浦和常盤', '埼玉県さいたま市浦和区常盤一丁目49-1' ],

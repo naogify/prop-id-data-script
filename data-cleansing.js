@@ -41,11 +41,11 @@ async function dataCleansing(data) {
       let normalizedBuilding = building;
 
       // 中黒（・）があった場合に削除
-      normalizedBuilding = normalizedBuilding.replace(/・/g, '')
+      normalizedBuilding = normalizedBuilding.replace(/・|･/g, '')
       // 空白文字を削除
       normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
       // 第、館、号、棟は削除
-      normalizedBuilding = normalizedBuilding.replace(/第|館|号|棟/g, '')
+      normalizedBuilding = normalizedBuilding.replace(/第|館|号|棟|番/g, '')
       // ひらがなをカタカナに直す
       normalizedBuilding = hiraToKana(normalizedBuilding)
       //ヴァ, ヴィ, ヴ, ヴェ, ヴォ を ﾊﾞ, ﾋﾞ, ﾌﾞ, ﾍﾞ, ﾎﾞ に変換
@@ -89,6 +89,7 @@ async function dataCleansing(data) {
       ])
     }
   }
+  
   return outCSV
 }
 

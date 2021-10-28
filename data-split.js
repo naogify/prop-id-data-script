@@ -6,7 +6,7 @@ const { createArrayCsvWriter } = require('csv-writer')
 const csvSync = require('csv-parse/lib/sync')
 const { deleteDuplicate } = require('./util/delete-duplicate')
 
-async function dataFilter(rawData) {
+async function dataSplit(rawData) {
 
   const buildingCSV = []
   const multiBuildingsCSV = []
@@ -47,7 +47,7 @@ async function exportCSV() {
 
   const file = fs.readFileSync(path.join(__dirname, 'cleansing.csv'), 'utf8')
   const rawData = csvSync(file);
-  const {buildingCSV, multiBuildingsCSV} = await dataFilter(rawData)
+  const {buildingCSV, multiBuildingsCSV} = await dataSplit(rawData)
 
   const csvWriterBuilding = createArrayCsvWriter({
     header: ['building', 'normalizedBuilding', 'address'],
@@ -68,4 +68,4 @@ if (require.main === module) {
   exportCSV()
 }
 
-exports.dataFilter = dataFilter
+exports.dataSplit = dataSplit
