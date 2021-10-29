@@ -130,8 +130,13 @@ describe('ビル名の正規化テスト', () => {
     expect(result).toMatchObject([['ハイツBEAUTY？?', 'ﾊｲﾂbeauty', '東京都千代田区永田町一丁目7-1']])
   })
 
-  test('が、ガ、ヶ は ｶﾞに変換', async () => {
-    const result = await dataCleansing([['百合ヶ丘がガ', '東京都千代田区永田町１丁目７−１']])
-    expect(result).toMatchObject([['百合ヶ丘がガ', '100合ｶﾞ丘ｶﾞｶﾞ', '東京都千代田区永田町一丁目7-1']])
+  test('ヶをｶﾞに変換', async () => {
+    const result = await dataCleansing([['百合ヶ丘', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['百合ヶ丘', '100合ｶﾞ丘', '東京都千代田区永田町一丁目7-1']])
+  })
+
+  test('全角アルファベットの東西南北を感じに直す', async () => {
+    const result = await dataCleansing([['ハイツＮＯＲＴＨ', '東京都千代田区永田町１丁目７−１']])
+    expect(result).toMatchObject([['ハイツＮＯＲＴＨ', 'ﾊｲﾂ北', '東京都千代田区永田町一丁目7-1']])
   })
 })

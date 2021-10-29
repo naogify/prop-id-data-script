@@ -39,7 +39,22 @@ async function dataCleansing(data) {
     if (isBuilding === null && isAddr === null && normalized.level === 3 && building !== '' & normalized.addr !== '') {
 
       let normalizedBuilding = building;
-
+      // ヶ を ｶﾞに変換
+      normalizedBuilding = normalizedBuilding.replace(/ヶ/g, 'ｶﾞ')
+      // ひらがなをカタカナに直す
+      normalizedBuilding = hiraToKana(normalizedBuilding)
+      // 全角英数記号、カタカナ、ローマ数字を半角に変換
+      normalizedBuilding = await jaconv.toHan(normalizedBuilding)
+      // 空白文字を削除
+      normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
+      // 漢数字を半角アラビア数字に直す
+      normalizedBuilding = await kan2num(normalizedBuilding)
+      // アルファベットを小文字に変換
+      normalizedBuilding = normalizedBuilding.toLowerCase()
+      // ひらがなとカタカナ（全角半角）の伸ばし棒は削除
+      normalizedBuilding = normalizedBuilding.replace(/ー|ー|ｰ/g, '')
+      // 横棒をハイフンに変換
+      normalizedBuilding = normalizedBuilding.replace(/[-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━]/g, '-')
       // 中黒（・）があった場合に削除
       normalizedBuilding = normalizedBuilding.replace(/・|･/g, '')
       // ？があった場合に削除
@@ -47,32 +62,21 @@ async function dataCleansing(data) {
       // №(ナンバー)をnoに変換
       normalizedBuilding = normalizedBuilding.replace(/№/g, 'no')
       // ピリオド、カンマ、アポストロフィーを削除
-      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\．|\，|\,|\＇|\'|\’|\´|\‘/g, '')
-      // が、ガ、ヶ は ｶﾞに変換
-      normalizedBuilding = normalizedBuilding.replace(/が|ガ|ヶ/g, 'ｶﾞ')
+      normalizedBuilding = normalizedBuilding.replace(/\.|\.|\．|\，|\,|\＇|\'|\’|\´|\‘|`/g, '')
       // 英語を日本語に変換
-      normalizedBuilding = normalizedBuilding.replace(/North|NORTH|north|ﾉｰｽ|ノース/g, '北')
-      normalizedBuilding = normalizedBuilding.replace(/South|SOUTH|south|ｻｳｽ|サウス/g, '南')
-      normalizedBuilding = normalizedBuilding.replace(/East|EAST|east|ｲｰｽﾄ|イースト/g, '東')
-      normalizedBuilding = normalizedBuilding.replace(/West|WEST|west|ｳｴｽﾄ|ウエスト/g, '西')
-      // ひらがなとカタカナ（全角半角）の伸ばし棒は削除
-      normalizedBuilding = normalizedBuilding.replace(/ー|ー|ｰ/g, '')
-      // 空白文字を削除
-      normalizedBuilding = normalizedBuilding.replace(/\s+/g, '')
+      normalizedBuilding = normalizedBuilding.replace(/north|ﾉｰｽ/g, '北')
+      normalizedBuilding = normalizedBuilding.replace(/south|ｻｳｽ/g, '南')
+      normalizedBuilding = normalizedBuilding.replace(/east|ｲｰｽﾄ/g, '東')
+      normalizedBuilding = normalizedBuilding.replace(/west|ｳｴｽﾄ/g, '西')
       // 括弧があれば中の文字を含めて削除
       normalizedBuilding = normalizedBuilding.replace(/\(.+?\)|\（.+?\）|\【.+?\】/g, '')
       // 第、館、号、棟は削除
       normalizedBuilding = normalizedBuilding.replace(/第|館|号|棟|番/g, '')
-      // ひらがなをカタカナに直す
-      normalizedBuilding = hiraToKana(normalizedBuilding)
       //ヴァ, ヴィ, ヴ, ヴェ, ヴォ を ﾊﾞ, ﾋﾞ, ﾌﾞ, ﾍﾞ, ﾎﾞ に変換
-      normalizedBuilding = normalizedBuilding.replace(/ヴァ|ｳﾞｧ/g, 'ﾊﾞ')
-      normalizedBuilding = normalizedBuilding.replace(/ヴィ|ｳﾞｨ/g, 'ﾋﾞ')
-      normalizedBuilding = normalizedBuilding.replace(/ヴェ|ｳﾞｪﾞ|ウ゛ェ/g, 'ﾍﾞ')
-      normalizedBuilding = normalizedBuilding.replace(/ヴォ|ｳﾞｫﾞ/g, 'ﾎﾞ')
-
-      // 全角英数記号、カタカナ、ローマ数字を半角に変換
-      normalizedBuilding = await jaconv.toHan(normalizedBuilding)
+      normalizedBuilding = normalizedBuilding.replace(/ｳﾞｧ/g, 'ﾊﾞ')
+      normalizedBuilding = normalizedBuilding.replace(/ｳﾞｨ/g, 'ﾋﾞ')
+      normalizedBuilding = normalizedBuilding.replace(/ｳﾞｪﾞ/g, 'ﾍﾞ')
+      normalizedBuilding = normalizedBuilding.replace(/ｳﾞｫﾞ/g, 'ﾎﾞ')
       // 半角ローマ数字をアラビア数字に変換（MacデフォルトIMIとGoogle日本語入力では12までしか入力できない）
       normalizedBuilding = normalizedBuilding.replace(/ⅰ/g, '1')
       normalizedBuilding = normalizedBuilding.replace(/ⅱ/g, '2')
@@ -86,17 +90,8 @@ async function dataCleansing(data) {
       normalizedBuilding = normalizedBuilding.replace(/ⅹ/g, '10')
       normalizedBuilding = normalizedBuilding.replace(/ⅺ/g, '11')
       normalizedBuilding = normalizedBuilding.replace(/ⅻ/g, '12')
-      // 漢数字を半角アラビア数字に直す
-      normalizedBuilding = await kan2num(normalizedBuilding)
-      // 横棒をハイフンに変換
-      normalizedBuilding = normalizedBuilding.replace(/[-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━]/g, '-')
-      // アルファベットを小文字に変換
-      normalizedBuilding = normalizedBuilding.toLowerCase()
-
       // ♯ を # に変換する
       normalizedBuilding = normalizedBuilding.replace(/♯/g, '#')
-
-
       //ァィゥェォッャュョ を ｱｲｳｴｵﾂﾔﾕﾖ に変換
       normalizedBuilding = normalizedBuilding.replace(/ァ|ｧ/g, 'ｱ')
       normalizedBuilding = normalizedBuilding.replace(/ィ|ｨ/g, 'ｲ')
